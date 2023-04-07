@@ -1,31 +1,144 @@
 package List.hashmap;
 
-import List.linkedlist.MyLinkedList;
+import java.util.*;
 
-public class MyHashMap<T, V> {
-    private Node<T, V> [] table;
+public class MyHashMap {
+
+    private static final int DEFAULT_CAPACITY = 16;
+    private static final float LOAD_FACTOR = 0.75f;
+
+    private Node[] table;
     private int size;
 
-    public void put(T key, V value){
-        hash(key);
-        int i = (table.length - 1) & hash(key);
-        Node<T, V> newNode = new Node<>(key, value);
+    public MyHashMap() {
+        table = new Node[DEFAULT_CAPACITY];
     }
-    public static final int hash(Object key){
-        int h;
-        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
-    }
-    private static class Node<T, V>{
-        private Node <T, V> next;
-        private final T key;
-        private V value;
-        private int hash;
 
-        private Node(T key, V value) {
-            this.key = key;
-            this.value = value;
+    public void put(Object key, Object value) {
+        int hash = hash(key);
+        int index = indexFor(hash, table.length);
+        Node prev = null;
+        Node curr = table[index];
+
+        while (curr != null) {
+            if (curr.key.equals(key)) {
+                curr.value = value;
+                return;
+            }
+            prev = curr;
+            curr = curr.next;
         }
 
+        Node newNode = new Node(key, value, hash);
+        if (prev == null) {
+            table[index] = newNode;
+        } else {
+            prev.next = newNode;
+        }
+        size++;
+
+        if (size > table.length * LOAD_FACTOR) {
+            resize();
+        }
     }
 
+    public Object get(Object key) {
+        int hash = hash(key);
+        int index = indexFor(hash, table.length);
+        Node curr = table[index];
+
+        while (curr != null) {
+            if (curr.key.equals(key)) {
+                return curr.value;
+            }
+            curr = curr.next;
+        }
+
+        return null;
+    }
+
+    public Object remove(Object key) {
+        int hash = hash(key);
+        int index = indexFor(hash, table.length);
+        Node prev = null;
+        Node curr = table[index];
+
+        while (curr != null) {
+            if (curr.key.equals(key)) {
+                if (prev == null) {
+                    table[index] = curr.next;
+                } else {
+                    prev.next = curr.next;
+                }
+                size--;
+                return curr.value;
+            }
+            prev = curr;
+            curr = curr.next;
+        }
+
+        return null;
+    }
+
+    public void clear() {
+        Arrays.fill(table, null);
+        size = 0;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    private void resize() {
+        Node[] oldTable = table;
+        table = new Node[table.length * 2];
+        size = 0;
+
+        for (Node node : oldTable) {
+            while (node != null) {
+                put(node.key, node.value);
+                node = node.next;
+            }
+        }
+    }
+
+    private int hash(Object key) {
+        return key == null ? 0 : key.hashCode();
+    }
+
+    private int indexFor(int hash, int length) {
+        return (length - 1) & hash;
+    }
+
+    private static class Node {
+        private final Object key;
+        private Object value;
+        private final int hash;
+        private Node next;
+
+        public Node(Object key, Object value, int hash) {
+            this.key = key;
+            this.value = value;
+            this.hash = hash;
+        }
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+
+        for (Node node : table) {
+            while (node != null) {
+                sb.append(node.key).append("=").append(node.value).append(", ");
+                node = node.next;
+            }
+        }
+
+        if (sb.length() > 1) {
+            sb.setLength(sb.length() - 2);
+        }
+
+        sb.append("}");
+        return sb.toString();
+    }
 }
