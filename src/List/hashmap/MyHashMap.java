@@ -2,23 +2,23 @@ package List.hashmap;
 
 import java.util.*;
 
-public class MyHashMap {
+public class MyHashMap<T, V> {
 
     private static final int DEFAULT_CAPACITY = 16;
     private static final float LOAD_FACTOR = 0.75f;
 
-    private Node[] table;
+    private Node<T, V>[] table;
     private int size;
 
     public MyHashMap() {
         table = new Node[DEFAULT_CAPACITY];
     }
 
-    public void put(Object key, Object value) {
+    public void put(T key, V value) {
         int hash = hash(key);
         int index = indexFor(hash, table.length);
-        Node prev = null;
-        Node curr = table[index];
+        Node<T, V> prev = null;
+        Node<T, V> curr = table[index];
 
         while (curr != null) {
             if (curr.key.equals(key)) {
@@ -42,14 +42,14 @@ public class MyHashMap {
         }
     }
 
-    public Object get(Object key) {
+    public V get(T key) {
         int hash = hash(key);
         int index = indexFor(hash, table.length);
-        Node curr = table[index];
+        Node<T, V> curr = table[index];
 
         while (curr != null) {
             if (curr.key.equals(key)) {
-                return curr.value;
+                return (V) curr.value;
             }
             curr = curr.next;
         }
@@ -57,7 +57,7 @@ public class MyHashMap {
         return null;
     }
 
-    public Object remove(Object key) {
+    public V remove(T key) {
         int hash = hash(key);
         int index = indexFor(hash, table.length);
         Node prev = null;
@@ -71,7 +71,7 @@ public class MyHashMap {
                     prev.next = curr.next;
                 }
                 size--;
-                return curr.value;
+                return (V) curr.value;
             }
             prev = curr;
             curr = curr.next;
@@ -79,7 +79,6 @@ public class MyHashMap {
 
         return null;
     }
-
     public void clear() {
         Arrays.fill(table, null);
         size = 0;
@@ -96,13 +95,13 @@ public class MyHashMap {
 
         for (Node node : oldTable) {
             while (node != null) {
-                put(node.key, node.value);
+                put((T) node.key, (V) node.value);
                 node = node.next;
             }
         }
     }
 
-    private int hash(Object key) {
+    private int hash(T key) {
         return key == null ? 0 : key.hashCode();
     }
 
@@ -110,18 +109,19 @@ public class MyHashMap {
         return (length - 1) & hash;
     }
 
-    private static class Node {
-        private final Object key;
-        private Object value;
+    private static class Node<T, V> {
+        private final T key;
+        private V value;
         private final int hash;
-        private Node next;
+        private Node<T, V> next;
 
-        public Node(Object key, Object value, int hash) {
+        public Node(T key, V value, int hash) {
             this.key = key;
             this.value = value;
             this.hash = hash;
         }
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -2,18 +2,19 @@ package List.arraylist;
 
 import java.util.Arrays;
 
-public class MyArrayList {
+public class MyArrayList<T> {
 
     private Object[] myArr = new Object[0];
+
     private int size = 0;
 
-    public void add(Object ob) {
+    public void add(T ob) {
         myArr = Arrays.copyOf(myArr, myArr.length + 1);
         myArr[size] = ob;
         size++;
     }
 
-    public Object[] remove(int indexToRemove) {
+    public T[] remove(int indexToRemove) {
         int index = 0;
         Object[] myArrNew = new Object[myArr.length - 1];
         for (int j = 0; j < myArr.length; j++) {
@@ -25,7 +26,8 @@ public class MyArrayList {
             }
 
         }
-        return myArr = Arrays.copyOf(myArrNew, myArrNew.length);
+        size--;
+        return (T[]) (myArr = Arrays.copyOf(myArrNew, myArrNew.length));
     }
 
     public Object get(int index) throws IndexOutOfBoundsException {
@@ -35,14 +37,14 @@ public class MyArrayList {
         return myArr[index];
     }
 
-    public Object[] clear() {
+    public T[] clear() {
         size = 0;
-        return myArr = new Object[]{};
+        return (T[]) (myArr = new Object[]{});
 
     }
 
     public int size() {
-        return myArr.length;
+        return size;
     }
 
     @Override
