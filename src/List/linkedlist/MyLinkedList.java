@@ -1,8 +1,8 @@
 package List.linkedlist;
 
 public class MyLinkedList<T> {
-    private Node first;
-    private Node last;
+    private Node<T> first;
+    private Node<T> last;
     private int size = 0;
 
     public void add(T el) {
