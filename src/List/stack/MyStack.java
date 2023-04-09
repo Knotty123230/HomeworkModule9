@@ -14,8 +14,8 @@ public class MyStack<T> {
     }
 
     public void push(T el) {
-        Node newnode = new Node<>(el);
-        Node current = head;
+        Node<T> newnode = new Node<>(el);
+        Node<T> current = head;
         if (head == null) {
             head = newnode;
         } else {
@@ -69,7 +69,8 @@ public class MyStack<T> {
             curr = next;
         }
     }
-    public int size(){
+
+    public int size() {
         return size;
     }
 
@@ -80,7 +81,7 @@ public class MyStack<T> {
             head = head.next;
             return;
         }
-        if (index > size){
+        if (index > size) {
             throw new NullPointerException();
         }
         for (int i = 0; i < index; i++) {

@@ -5,8 +5,8 @@ public class MyQueue<T> {
     private int size;
 
     public void add(T el) {
-        Node newnode = new Node<>(el);
-        Node current = head;
+        Node<T> newnode = new Node<>(el);
+        Node<T> current = head;
         if (head == null) {
             head = newnode;
         } else {
@@ -18,16 +18,16 @@ public class MyQueue<T> {
         size++;
     }
 
-    public Object peek() {
+    public T peek() {
         if (head == null) {
             throw new NullPointerException();
         }
         return head.el;
     }
 
-    public Object poll() {
+    public T poll() {
         if (head != null) {
-            Node result = head;
+            Node<T> result = head;
             head = head.next;
             size--;
             return result.el;
@@ -36,9 +36,9 @@ public class MyQueue<T> {
     }
 
     public void clear() {
-        Node current = head;
+        Node<T> current = head;
         while (current != null) {
-            Node next = current.next;
+            Node<T> next = current.next;
             current.next = null;
             head = null;
             current = next;
@@ -66,7 +66,7 @@ public class MyQueue<T> {
 
 
     private static class Node<T> {
-        private Node next;
+        private Node<T> next;
         private T el;
 
         public Node(T el) {

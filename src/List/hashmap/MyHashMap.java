@@ -49,7 +49,7 @@ public class MyHashMap<T, V> {
 
         while (curr != null) {
             if (curr.key.equals(key)) {
-                return (V) curr.value;
+                return curr.value;
             }
             curr = curr.next;
         }
@@ -60,8 +60,8 @@ public class MyHashMap<T, V> {
     public V remove(T key) {
         int hash = hash(key);
         int index = indexFor(hash, table.length);
-        Node prev = null;
-        Node curr = table[index];
+        Node<T, V> prev = null;
+        Node<T, V> curr = table[index];
 
         while (curr != null) {
             if (curr.key.equals(key)) {
@@ -71,7 +71,7 @@ public class MyHashMap<T, V> {
                     prev.next = curr.next;
                 }
                 size--;
-                return (V) curr.value;
+                return curr.value;
             }
             prev = curr;
             curr = curr.next;

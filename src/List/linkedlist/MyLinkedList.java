@@ -17,17 +17,17 @@ public class MyLinkedList<T> {
         size++;
     }
 
-    public Object get(int index){
+    public T get(int index){
         if (index < 0 || index >= size){
             throw new IndexOutOfBoundsException();
         }
-        Node curr = first;
+        Node<T> curr = first;
         for (int i = 0; i < index; i++) {
             if (curr.next != null) {
                 curr = curr.next;
             }
         }
-        return curr.el;
+        return  curr.el;
     }
 
     public void remove(int index) {
@@ -68,10 +68,10 @@ public class MyLinkedList<T> {
         return size;
     }
 
-    public static class Node<T> {
-        Node<T> next;
-        Node<T> previos;
-        T el;
+    private static class Node<T> {
+        private Node<T> next;
+        private Node<T> previos;
+        private T el;
 
         public Node(T el) {
             this.el = el;
